@@ -17,6 +17,8 @@ const ATTRIBUTE_MAPPING = {
         'cc': 'cluster_connections',
         'pk': 'pub_key',
         'nt': 'node_type',
+        'ent': 'entity',
+        'role': 'role',
         'tch': 'total_channels',
         'tcap': 'total_capacity',
         'fcap': 'formatted_total_capacity',
@@ -977,10 +979,22 @@ function createSidebarManager() {
             closedChannelsInfo = `<div><span class="info-label">Closed Channels:</span> ${attrs.closedChannelsCount}</div>`;
         }
 
+        // Entity & Role information (available in ghigh and gfree)
+        let entityInfo = '';
+        if (attrs.entity) {
+            entityInfo = `<div><span class="info-label">Entity:</span> <strong style="color: #F7931A;">${attrs.entity}</strong></div>`;
+        }
+        let roleInfo = '';
+        if (attrs.role) {
+            roleInfo = `<div><span class="info-label">Role:</span> <em>${attrs.role}</em></div>`;
+        }
+
         document.getElementById('node-info').innerHTML = `
             <div class="info-title">${nodeAttributes.label}</div>
             <div class="info-content">
                 ${clusterInfo}
+                ${entityInfo}
+                ${roleInfo}
                 <div><span class="info-label">Type:</span> ${attrs.nodeType || 'Unknown'}</div>
                 <div><span class="info-label">Total Capacity:</span> ${attrs.totalCapacity}</div>
                 <div><span class="info-label">Total Channels:</span> ${attrs.totalChannels}</div>
@@ -1409,6 +1423,8 @@ function createVisualization(data, jsonFile) {
             attributes: {
                 alias: node.alias,
                 nodeType: nodeType,
+                entity: node.entity || null,
+                role: node.role || null,
                 totalCapacity: formattedCapacity,
                 rawCapacity: totalCapacity,
                 totalChannels: totalChannels,
